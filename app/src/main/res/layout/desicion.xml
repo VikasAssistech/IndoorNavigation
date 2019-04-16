@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
+    >
+
+    <Button
+        android:id="@+id/Navigation"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Navigation"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/Appointment"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/Appointment"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Appointment"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/Test_Report"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Reports"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/Appointment"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/Upload"
+        android:layout_width="150dp"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/Test_Report"
+        android:text="Upload"
+        android:textAllCaps="false" />
+
+</RelativeLayout>

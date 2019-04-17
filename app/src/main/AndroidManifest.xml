@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -39,9 +40,7 @@
             android:name=".staticphase"
             >
         </activity>
-        <activity
-            android:name=".Plotter"
-            >
+        <activity android:name=".plot">
 
         </activity>
         <meta-data

@@ -9,42 +9,13 @@
     android:orientation="vertical"
     >
 
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="8dp">-->
-
-        <!--<Button-->
-            <!--android:id="@+id/expand"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="0.1"-->
-            <!--android:text="Expand Map"-->
-            <!--android:textAllCaps="true" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/compass"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_weight="0.4"-->
-            <!--android:scaleType="fitCenter" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/explore"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Explore"-->
-            <!--android:textAllCaps="true" />-->
-
-    <!--</LinearLayout>-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
 
         <ImageView
+
             android:id="@+id/map"
             android:layout_width="360dp"
             android:layout_height="360dp"
@@ -61,6 +32,38 @@
             android:text="" />
 
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Start Explore"
+            android:id="@+id/startexplore"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Stop Explore"
+            android:id="@+id/stopexplore"
+            android:layout_weight="0.5" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textexplore"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"

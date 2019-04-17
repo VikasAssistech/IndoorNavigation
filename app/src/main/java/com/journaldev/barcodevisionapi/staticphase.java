@@ -89,6 +89,7 @@ public class staticphase extends AppCompatActivity{
         });
     }
     private void queryval() {
+        categories1.clear();
         requestQueue = Volley.newRequestQueue(staticphase.this);
         final JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
                 (Request.Method.GET, shortpath, null, new com.android.volley.Response.Listener<JSONArray>() {
@@ -107,7 +108,7 @@ public class staticphase extends AppCompatActivity{
                             categories1.add(v);
                             categories1.add(p);
                             categories1.add(n);
-                            startActivity(new Intent(staticphase.this, Plotter.class).putStringArrayListExtra("titu",(ArrayList<String>) categories1));
+                            startActivity(new Intent(staticphase.this, plot.class).putStringArrayListExtra("titu", (ArrayList<String>) categories1));
                         }
                         catch (JSONException e){}
                     }

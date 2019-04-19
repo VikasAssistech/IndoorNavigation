@@ -11,16 +11,18 @@
     <Button
         android:id="@+id/Navigation"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:text="Navigation"
         android:layout_centerHorizontal="true"
+        android:textSize="18sp"
         android:layout_above="@+id/Appointment"
         android:textAllCaps="false" />
 
     <Button
         android:id="@+id/Appointment"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_height="60dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:text="Appointment"
@@ -29,8 +31,9 @@
     <Button
         android:id="@+id/Test_Report"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:text="Reports"
+        android:textSize="18sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/Appointment"
@@ -38,9 +41,10 @@
 
     <Button
         android:id="@+id/Upload"
+        android:textSize="18sp"
         android:layout_width="150dp"
         android:layout_centerVertical="true"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/Test_Report"
         android:text="Upload"

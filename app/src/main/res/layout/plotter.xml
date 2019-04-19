@@ -52,6 +52,13 @@
             android:id="@+id/stopexplore"
             android:layout_weight="0.5" />
 
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Read"
+            android:id="@+id/read"
+            android:layout_weight="0.5" />
+
     </LinearLayout>
 
     <TextView

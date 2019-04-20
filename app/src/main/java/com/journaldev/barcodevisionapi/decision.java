@@ -27,11 +27,15 @@ class Beacon{
     ArrayList<String> tags;
     Integer intValue;
     String beaconName;
+    double distance;
+    int count;
     Beacon(String tag, Integer intValue, String beaconName){
             this.intValue = intValue;
             this.beaconName=beaconName;
             this.tags = new ArrayList<String>();
             this.tags.add(tag);
+            this.distance=0;
+            this.count=0;
     }
 }
 

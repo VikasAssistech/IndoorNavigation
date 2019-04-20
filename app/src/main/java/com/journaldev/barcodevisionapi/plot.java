@@ -57,6 +57,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     public BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     public Button startexplore, stopexplore, prev, next, read;
     public UFOBeaconManager ufoBeaconManager;
+    public String lastBeacon="akshay";
     public TextToSpeech textToSpeech;
     Bitmap myBitmap;
     Canvas tempCanvas;
@@ -98,6 +99,8 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     ImageView map;
     HashMap<String, Double> budget = new HashMap<>();
     TextView inspect;
+    HashMap<String , String>  beacons = new HashMap<String,String>();
+
     public final String beacon1 = "55:46:4F:D2:6A:CF";
     public final String beacon2 = "55:46:4F:D2:6A:DD";
     public final String beacon3 = "55:46:4F:11:87:50";
@@ -395,6 +398,13 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plotter);
+        beacons.put("55:46:4F:D2:6A:CF","Beacon1");
+        beacons.put("55:46:4F:D2:6A:DD","Beacon2");
+        beacons.put("55:46:4F:11:87:50","Beacon3");
+        beacons.put("55:46:4F:11:88:22","Beacon4");
+        beacons.put("55:46:4F:11:87:13","Beacon5");
+        beacons.put("55:46:4F:11:88:59","Beacon6");
+        beacons.put("55:46:4F:11:88:1B","Beacon7");
         checkLocationPermission();
         textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -441,8 +451,9 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String toSpeak=inspect.getText().toString();
-                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+//                String toSpeak=inspect.getText().toString();
+//                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+                startScanning();
             }
         });
         prev.setOnClickListener(new View.OnClickListener() {
@@ -489,7 +500,6 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         }
         description();
         plott();
-        enableScan1();
 
     }
 
@@ -853,6 +863,47 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         }
         return temp;
     }
+
+    public void startScanning(){
+        ufoBeaconManager.startScan(new OnScanSuccessListener() {
+            @Override
+            public void onSuccess(final UFODevice ufoDevice) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        Toast.makeText(plot.this, beacons.get(ufoDevice.getBtdevice().getAddress()), Toast.LENGTH_SHORT).show();
+                        if(decision.hashBeacon.containsKey(beacons.get(ufoDevice.getBtdevice().getAddress()))){
+                            Beacon beacon =decision.hashBeacon.get(beacons.get(ufoDevice.getBtdevice().getAddress()));
+//                            Toast.makeText(plot.this, beacon.beaconName, Toast.LENGTH_SHORT).show();
+                            if(ufoDevice.getDistance()!=0) {
+                                beacon.count++;
+                                beacon.distance += ufoDevice.getDistance();
+                                if (beacon.count > 5) {
+                                    if (beacon.distance/beacon.count<1 && !lastBeacon.equals(beacon.beaconName)){
+                                        alert2(beacon.beaconName);
+                                        Toast.makeText(plot.this, beacon.beaconName, Toast.LENGTH_SHORT).show();
+                                        lastBeacon = beacon.beaconName;
+                                    }
+                                    beacon.count = 0;
+                                    beacon.distance = 0;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
+    }
+//    public void stopScanning(){
+//        ufoBeaconManager.s
+//    }
+
+
 
 }
 

@@ -130,6 +130,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         beacons.put("55:46:4F:11:88:59","Beacon6");
         beacons.put("55:46:4F:11:88:1B","Beacon7");
         checkLocationPermission();
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -137,7 +138,6 @@ public class plot extends AppCompatActivity implements SensorEventListener {
             }
         });
         map = findViewById(R.id.map);
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         textexplore = findViewById(R.id.textexplore);
         startexplore = findViewById(R.id.startexplore);
         stopexplore = findViewById(R.id.stopexplore);
@@ -207,6 +207,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         startexplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 explor();
             }
         });
@@ -224,8 +225,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         }
         description();
         plott();
-
-    }
+        }
 
     public void alert2(String proximitybeacon)
     {
@@ -405,7 +405,6 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 for(int i=0;i<cat1.size();i++)
                 {
                     int titu= cat2.get(i);
-                    if(titu!=cordinate){
                         row2 = titu / 100;
                         col2 = titu % 100;
                         float angle=(float)Math.toDegrees((Math.atan2((row2-row1)*0.392,(col2-col1)*0.46)));
@@ -414,19 +413,18 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                         if ((angle > data - 10 && angle < data + 10) || (angle > data + 360 - 10 && angle < data + 360 + 10)) {
                             str = str + cat1.get(i)+"\n";
                             if(lastBeacon.equals("Beacon7")){
-                                if(data>1  && data< 21)
-                                    str=str+"Women's Washroom";
-                                if(data> 321 && data< 341)
-                                    str=str+"Drinking Water";
-                                if(data> 296 && data< 316)
+
+                                 if(data> 301 && data< 336)
                                     str=str+"Men's Washroom";
+                                else if(data>6  && data< 16)
+                                    str=str+"Women's Washroom";
+                               // Toast.makeText(this, ""+data, Toast.LENGTH_SHORT).show();
                             }
                         }
-                    }
-                    }
+                        }
                 textexplore.setText(str);
-                String toSpeak=textexplore.getText().toString();
-                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+//                String toSpeak=textexplore.getText().toString();
+//                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
 
             }
         }

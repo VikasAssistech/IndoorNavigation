@@ -39,8 +39,6 @@ import com.ufobeaconsdk.callback.OnSuccessListener;
 import com.ufobeaconsdk.main.UFOBeaconManager;
 import com.ufobeaconsdk.main.UFODevice;
 
-import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
-import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,7 +53,7 @@ import java.util.Map;
 public class plot extends AppCompatActivity implements SensorEventListener {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     public BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    public Button startexplore, stopexplore, prev, next, read;
+    public Button startexplore, stopexplore, prev, next, read,start;
     public UFOBeaconManager ufoBeaconManager;
     public String lastBeacon="akshay";
     public TextToSpeech textToSpeech;
@@ -143,6 +141,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         stopexplore = findViewById(R.id.stopexplore);
         read=findViewById(R.id.read);
         inspect = findViewById(R.id.inspect);
+        start=findViewById(R.id.start);
         prev = findViewById(R.id.prev);
         next = findViewById(R.id.next);
         display = findViewById(R.id.display);
@@ -175,11 +174,11 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String toSpeak=inspect.getText().toString();
-//                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
-                startScanning();
+                String toSpeak=inspect.getText().toString();
+                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
             }
         });
+
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,10 +210,17 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 explor();
             }
         });
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startScanning();
+            }
+        });
         stopexplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textexplore.setText("");
+                onPause();
             }
         });
         ufoBeaconManager = new UFOBeaconManager(plot.this);
@@ -233,12 +239,11 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         String s="";
         for(String tag:tags)
             s+=tag+"\n";
-        textToSpeech.speak("You have reached "+ s,TextToSpeech.QUEUE_FLUSH, null);
-
-    }
+        textToSpeech.speak("You have reached "+ s.replaceAll("_"," "),TextToSpeech.QUEUE_FLUSH, null);
+        }
     public void alert() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(40);
+        v.vibrate(200);
 //        try {
 //            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
@@ -397,6 +402,13 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 if (data < 0) {
                     data += 360;
                 }
+                if(lastBeacon.equals(("Beacon7")))
+                {
+                    if(data> 301 && data< 336)
+                        str=str+"Men's Washroom"+"\n";
+                    else if(data>6  && data< 16)
+                        str=str+"Women's Washroom"+"\n";
+                }
                 int cordinate = decision.hashBeacon.get(lastBeacon).intValue;
                 row1 = cordinate / 100;
                 col1 = cordinate % 100;
@@ -405,6 +417,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 for(int i=0;i<cat1.size();i++)
                 {
                     int titu= cat2.get(i);
+                    if(titu!=cordinate){
                         row2 = titu / 100;
                         col2 = titu % 100;
                         float angle=(float)Math.toDegrees((Math.atan2((row2-row1)*0.392,(col2-col1)*0.46)));
@@ -412,17 +425,9 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                             angle = angle + 360;
                         if ((angle > data - 10 && angle < data + 10) || (angle > data + 360 - 10 && angle < data + 360 + 10)) {
                             str = str + cat1.get(i)+"\n";
-                            if(lastBeacon.equals("Beacon7")){
-
-                                 if(data> 301 && data< 336)
-                                    str=str+"Men's Washroom";
-                                else if(data>6  && data< 16)
-                                    str=str+"Women's Washroom";
-                               // Toast.makeText(this, ""+data, Toast.LENGTH_SHORT).show();
                             }
-                        }
-                        }
-                textexplore.setText(str);
+                        }}
+                textexplore.setText(str.replaceAll("_"," "));
 //                String toSpeak=textexplore.getText().toString();
 //                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
 

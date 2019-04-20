@@ -91,7 +91,7 @@ public class decision extends AppCompatActivity {
                                             beacon.tags.add(o1.getString("Tags"));
                                         }
                                         hashTag.put(o1.getString("Tags"),o1.getInt("value"));
-                                        categories.add(o1.getString("Tags"));
+                                        categories.add(o1.getString("Tags").replaceAll("_"," "));
                                         cat.add(o1.getInt("value"));
                                     }
                                     startActivity(new Intent(decision.this, staticphase.class).putStringArrayListExtra("goku",(ArrayList<String>) categories));

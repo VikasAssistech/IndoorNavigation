@@ -58,7 +58,7 @@ public class staticphase extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 textToSpeech.speak(categories.get(position),TextToSpeech.QUEUE_FLUSH,null);
-                s1=categories.get(position);
+                s1=categories.get(position).replaceAll(" ","_");
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -71,7 +71,7 @@ public class staticphase extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 textToSpeech.speak(categories.get(position),TextToSpeech.QUEUE_FLUSH,null);
-                s2=categories.get(position);
+                s2=categories.get(position).replaceAll(" ","_");
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

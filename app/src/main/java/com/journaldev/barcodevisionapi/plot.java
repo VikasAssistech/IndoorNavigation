@@ -116,283 +116,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         sensorManager.registerListener(plot.this, magnometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    Handler handler1 = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String string = bundle.getString("myKey1");
-            String[] str = string.split(",");
-            if (str[0].equals(beacon1)) {
-                d1 = Double.parseDouble(str[1]);
-                if (d1 != 0) {
-                    c1++;
-                    d11 = d11 + d1;
-                }
-                if(c1>2 && d11/c1<1)
-                {
-                    //Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-                    //alert();
-                    display.setText("Beacon 1");
-                    c1=0;
-                    d11=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
 
-                }
-            }
-            else if (str[0].equals(beacon2)) {
-                d2 = Double.parseDouble(str[1]);
-                if (d2 != 0) {
-                    c2++;
-                    d12 = d12 + d2;
-                    c1=0;
-                    d11=0;
-                }
-                if(c2>2 && d12/c2<1)
-                {
-                    display.setText("Beacon 2");
-                    c2=0;
-                    d12=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
-                }
-            }
-            else if (str[0].equals(beacon3)) {
-                d3 = Double.parseDouble(str[1]);
-                if (d3 != 0) {
-                    c3++;
-                    d13 = d13 + d3;
-                }
-                if(c3>2 && d13/c3<1)
-                {
-                    //Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-                    //alert();
-                    display.setText("Beacon 3");
-                    c3=0;
-                    d13=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
-                }
-            }
-            else if (str[0].equals(beacon4)) {
-                d4 = Double.parseDouble(str[1]);
-                if (d4 != 0) {
-                    c4++;
-                    d14 = d14 + d4;
-                }
-                if(c4>2 && d14/c4<1)
-                {
-                    //Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-                    //alert();
-                    display.setText("Beacon 4");
-                    c4=0;
-                    d14=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
-                }
-            }
-            else if (str[0].equals(beacon5)) {
-                d5 = Double.parseDouble(str[1]);
-                if (d5 != 0) {
-                    c5++;
-                    d15 = d15 + d5;
-                }
-                if(c5>2 && d15/c5<1)
-                {
-                    //Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-                    //alert();
-                    display.setText("Beacon 5");
-                    c5=0;
-                    d15=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
-                }
-            }
-            else if (str[0].equals(beacon6)) {
-                d6 = Double.parseDouble(str[1]);
-                if (d6 != 0) {
-                    c6++;
-                    d16 = d16 + d6;
-                }
-                if(c6>2 && d16/c6<1)
-                {
-                    //Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-                    //alert();
-                    display.setText("Beacon 6");
-                    c6=0;
-                    d16=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
-                }
-            }
-            else if (str[0].equals(beacon7)) {
-                d7 = Double.parseDouble(str[1]);
-                if (d7 != 0) {
-                    c7++;
-                    d17 = d17 + d7;
-                }
-                if(c7>2 && d17/c7<1)
-                {
-                    //Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-                    //alert();
-                    display.setText("Beacon 7");
-                    c7=0;
-                    d17=0;
-                    d11 = 0;
-                    d12 = 0;
-                    d13 = 0;
-                    c1 = 0;
-                    c2 = 0;
-                    c3 = 0;
-                    d14 = 0;
-                    d15 = 0;
-                    d16 = 0;
-                    d17=0;
-                    c4 = 0;
-                    c5 = 0;
-                    c6 = 0;
-                    c7=0;
-                }
-            }
-//            t++;
-//            if (t>19) {
-//                if(c1>5)
-//                distances[0] = d11 / c1;
-//                else
-//                    distances[0] =0;
-//                if(c2>5)
-//                distances[1] = d12 / c2;
-//                else
-//                    distances[1] =0;
-//                if(c3>5)
-//                distances[2] = d13 / c3;
-//                else
-//                    distances[2] =0;
-//                if(c4>5)
-//                distances[3] = d14 / c4;
-//                else
-//                    distances[3] =0;
-//                if(c5>5)
-//                distances[4] = d15 / c5;
-//                else
-//                    distances[4] =0;
-//                if(c6>5)
-//                distances[5]= d16/c6;
-//                else
-//                    distances[5] =0;
-//                if(c7>5)
-//                distances[6]= d17/c7;
-//                else
-//                    distances[6] =0;
-//                for(int i=0;i<7;i++)
-//                {
-//                    if(distances[i]!=0)
-//                    budget.put("beacon"+(i+1),distances[i]);
-//                }
-//                int k=0;
-//                Map<String,Double> hm = sortByValue(budget);
-//                for (Map.Entry<String, Double> en : hm.entrySet()) {
-//                    if (k > 2)
-//                        break;
-//                    else {
-//                        if(k==0)
-//                        {
-//                            proximitybeacon=en.getKey();
-//                            if(en.getValue()<1.2)
-//                            {
-//                                Toast.makeText(plot.this, "You can now use Explore Feature!", Toast.LENGTH_SHORT).show();
-//                                alert();
-//                                display.setText(en.getKey());
-//                            }
-//                        }
-//                        distances1[k] = en.getValue();
-//                        String temp=en.getKey();
-//                        char te=temp.charAt(temp.length()-1);
-//                        positions1[k][0]=positions[Character.getNumericValue(te)-1][0];
-//                        positions1[k++][1]=positions[Character.getNumericValue(te)-1][1];
-//                    }
-//                }
-//                NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions1, distances1), new LevenbergMarquardtOptimizer());
-//                LeastSquaresOptimizer.Optimum optimum = solver.solve();
-//                double[] centroid = optimum.getPoint().toArray();
-
-//                t=0;
-//                plott((float) centroid[0], (float) centroid[1]);
-//            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -514,7 +238,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     }
     public void alert() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(100);
+        v.vibrate(40);
 //        try {
 //            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
@@ -583,130 +307,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         Toast.makeText(plot.this, "Bluetooth OFF", Toast.LENGTH_SHORT).show();
     }
 
-    public void enableScan1() {
-        ufoBeaconManager.startScan(new OnScanSuccessListener() {
-            @Override
-            public void onSuccess(final UFODevice ufoDevice) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BluetoothDevice bt = ufoDevice.getBtdevice();
-                        String store1 = bt.getAddress();
-                        double store3 = ufoDevice.getDistance();
-                        if (store1.equals(beacon1)) {
-                            d1 = store3;
-                            if (d1 != 0) {
-                                c1++;
-                                d11 = d11 + d1;
-                            }
-                            if(c1>2 && d11/c1<1)
-                            {
-                                kuku="Beacon1";
-                                alert2("Beacon1");
-                                c1=0;
-                                d11=0;
-                            }
-                        }
-                        else if (store1.equals(beacon2)) {
-                            d2 = store3;
-                            if (d2 != 0) {
-                                c2++;
-                                d12 = d12 + d2;
-                                c1=0;
-                                d11=0;
-                            }
-                            if(c2>2 && d12/c2<1)
-                            {
-                                kuku="Beacon2";
-                                alert2("Beacon2");
-                                c2=0;
-                                d12=0;
 
-                            }
-                        }
-                        else if (store1.equals(beacon3)) {
-                            d3 = store3;
-                            if (d3 != 0) {
-                                c3++;
-                                d13 = d13 + d3;
-                            }
-                            if(c3>2 && d13/c3<1)
-                            {
-                                kuku="Beacon3";
-                                alert2("Beacon3");
-                                c3=0;
-                                d13=0;
-
-                            }
-                        }
-                        else if (store1.equals(beacon4)) {
-                            d4 = store3;
-                            if (d4 != 0) {
-                                c4++;
-                                d14 = d14 + d4;
-                            }
-                            if(c4>2 && d14/c4<1)
-                            {
-                                kuku="Beacon4";
-                                alert2("Beacon4");
-                                c4=0;
-                                d14=0;
-
-                            }
-                        }
-                        else if (store1.equals(beacon5)) {
-                            d5 = store3;
-                            if (d5 != 0) {
-                                c5++;
-                                d15 = d15 + d5;
-                            }
-                            if(c5>2 && d15/c5<1)
-                            {
-                                kuku="Beacon5";
-                                alert2("Beacon5");
-                                c5=0;
-                                d15=0;
-
-                            }
-                        }
-                        else if (store1.equals(beacon6)) {
-                            d6 = store3;
-                            if (d6 != 0) {
-                                c6++;
-                                d16 = d16 + d6;
-                            }
-                            if(c6>2 && d16/c6<1)
-                            {
-                                kuku="Beacon6";
-                                alert2("Beacon6");
-                                c6=0;
-                                d16=0;
-
-                            }
-                        }
-                        else if (store1.equals(beacon7)) {
-                            d7 = store3;
-                            if (d7 != 0) {
-                                c7++;
-                                d17 = d17 + d7;
-                            }
-                            if(c7>2 && d17/c7<1)
-                            {
-                                kuku="Beacon7";
-                                alert2("Beacon7");
-                                c7=0;
-                                d17=0;
-                            }
-                        }
-                    }
-                });
-            }
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(int i, String s) {
-            }
-        });
-    }
 
     public void disableScan() {
         ufoBeaconManager.stopScan(new OnSuccessListener() {
@@ -796,8 +397,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 if (data < 0) {
                     data += 360;
                 }
-                proximitybeacon="Beacon7";
-                int cordinate = decision.hashBeacon.get(proximitybeacon).intValue;
+                int cordinate = decision.hashBeacon.get(lastBeacon).intValue;
                 row1 = cordinate / 100;
                 col1 = cordinate % 100;
                 List<String> cat1=decision.getCategory();
@@ -811,20 +411,23 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                         float angle=(float)Math.toDegrees((Math.atan2((row2-row1)*0.392,(col2-col1)*0.46)));
                         if(angle<0)
                             angle = angle + 360;
-                        if ((angle > data - 30 && angle < data + 30) || (angle > data + 360 - 30 && angle < data + 360 + 30)) {
+                        if ((angle > data - 10 && angle < data + 10) || (angle > data + 360 - 10 && angle < data + 360 + 10)) {
                             str = str + cat1.get(i)+"\n";
-                            if(proximitybeacon.equals("Beacon7")){
-                                if(data> 321 && data< 361)
+                            if(lastBeacon.equals("Beacon7")){
+                                if(data>1  && data< 21)
                                     str=str+"Women's Washroom";
-                                if(data> 306 && data< 316)
+                                if(data> 321 && data< 341)
                                     str=str+"Drinking Water";
-                                if(data> 291 && data< 301)
+                                if(data> 296 && data< 316)
                                     str=str+"Men's Washroom";
                             }
                         }
                     }
                     }
                 textexplore.setText(str);
+                String toSpeak=textexplore.getText().toString();
+                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+
             }
         }
     }
@@ -871,17 +474,17 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        Toast.makeText(plot.this, beacons.get(ufoDevice.getBtdevice().getAddress()), Toast.LENGTH_SHORT).show();
-                        if(decision.hashBeacon.containsKey(beacons.get(ufoDevice.getBtdevice().getAddress()))){
-                            Beacon beacon =decision.hashBeacon.get(beacons.get(ufoDevice.getBtdevice().getAddress()));
-//                            Toast.makeText(plot.this, beacon.beaconName, Toast.LENGTH_SHORT).show();
-                            if(ufoDevice.getDistance()!=0) {
+                            String c1=ufoDevice.getBtdevice().getAddress();
+                          if(decision.hashBeacon.containsKey(beacons.get(c1))){
+                            Beacon beacon =decision.hashBeacon.get(beacons.get(c1));
+                            double d1=ufoDevice.getDistance();
+                            if(d1!=0) {
                                 beacon.count++;
-                                beacon.distance += ufoDevice.getDistance();
-                                if (beacon.count > 5) {
+                                beacon.distance += d1;
+                                if (beacon.count > 3) {
                                     if (beacon.distance/beacon.count<1 && !lastBeacon.equals(beacon.beaconName)){
                                         alert2(beacon.beaconName);
-                                        Toast.makeText(plot.this, beacon.beaconName, Toast.LENGTH_SHORT).show();
+                                        alert();
                                         lastBeacon = beacon.beaconName;
                                     }
                                     beacon.count = 0;
@@ -899,12 +502,6 @@ public class plot extends AppCompatActivity implements SensorEventListener {
             }
         });
     }
-//    public void stopScanning(){
-//        ufoBeaconManager.s
-//    }
-
-
-
 }
 
 

@@ -32,6 +32,28 @@
             android:text="" />
 
     </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Navigate"
+            android:id="@+id/start"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Read"
+            android:id="@+id/read"
+            android:layout_weight="0.5" />
+
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,6 +73,7 @@
             android:text="Stop Explore"
             android:id="@+id/stopexplore"
             android:layout_weight="0.5" />
+
 
     </LinearLayout>
 

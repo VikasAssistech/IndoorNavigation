@@ -1,24 +1,20 @@
 package com.journaldev.barcodevisionapi;
 
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -27,12 +23,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class staticphase extends AppCompatActivity{
     String shortpathurl ="http://10.17.50.43/wayfinding/RunTest.php?source=";
     String shortpath="";
+    public TextToSpeech textToSpeech;
     List<String> categories;
-    List<String> categories1;
+    static List<String> categories1;
     Button btn;
     Spinner spinner1;
     Spinner spinner2;
@@ -40,14 +38,17 @@ public class staticphase extends AppCompatActivity{
     String s2="";
     RequestQueue requestQueue;
     String val[];
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.staticphase);
+        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                textToSpeech.setLanguage(Locale.ENGLISH);
+            }
+        });
         spinner1=findViewById(R.id.spinner1);
-        spinner1.setPrompt("Enter Source");
         spinner2=findViewById(R.id.spinner2);
-        spinner2.setPrompt("Enter Destination");
         categories=getIntent().getStringArrayListExtra("goku");
         categories1=new ArrayList<String>();
         ArrayAdapter<String> arrayAdapter1=new ArrayAdapter<String>(staticphase.this,android.R.layout.simple_spinner_item,categories);
@@ -56,7 +57,8 @@ public class staticphase extends AppCompatActivity{
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                s1=categories.get(position);
+                textToSpeech.speak(categories.get(position),TextToSpeech.QUEUE_FLUSH,null);
+                s1=categories.get(position).replaceAll(" ","_");
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -68,7 +70,8 @@ public class staticphase extends AppCompatActivity{
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                s2=categories.get(position);
+                textToSpeech.speak(categories.get(position),TextToSpeech.QUEUE_FLUSH,null);
+                s2=categories.get(position).replaceAll(" ","_");
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -77,10 +80,12 @@ public class staticphase extends AppCompatActivity{
         initViews();
     }
     private void initViews() {
+        Toast.makeText(staticphase.this, "Or enter it manually above!", Toast.LENGTH_LONG).show();
         btn=findViewById(R.id.submit_query);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textToSpeech.speak("Submit",TextToSpeech.QUEUE_FLUSH,null);
                 String data=decision.getData();
                 val=data.split(",");
                 shortpath=shortpathurl+s1+"&destination="+s2+"&building="+val[1]+"&floor="+val[0];
@@ -119,5 +124,5 @@ public class staticphase extends AppCompatActivity{
                 });
         requestQueue.add(jsonObjectRequest);
     }
-}
 
+}

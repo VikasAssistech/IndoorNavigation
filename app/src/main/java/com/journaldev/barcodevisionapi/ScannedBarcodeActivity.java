@@ -95,8 +95,8 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                                intentData = barcodes.valueAt(0).displayValue;
-                                startActivity(new Intent(ScannedBarcodeActivity.this, decision.class).putExtra("data",intentData));
+                            intentData = barcodes.valueAt(0).displayValue;
+                            startActivity(new Intent(ScannedBarcodeActivity.this, decision.class).putExtra("data",intentData));
                         }
                     });
 
@@ -116,4 +116,5 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         super.onResume();
         initialiseDetectorsAndSources();
     }
+
 }

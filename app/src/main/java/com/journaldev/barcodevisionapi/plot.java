@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -38,16 +39,24 @@ import com.ufobeaconsdk.callback.OnSuccessListener;
 import com.ufobeaconsdk.main.UFOBeaconManager;
 import com.ufobeaconsdk.main.UFODevice;
 
-import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
-import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class plot extends AppCompatActivity implements SensorEventListener {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     public BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    public Button startexplore, stopexplore, prev, next;
+    public Button startexplore, stopexplore, prev, next, read,start;
     public UFOBeaconManager ufoBeaconManager;
+    public String lastBeacon="akshay";
+    public TextToSpeech textToSpeech;
     Bitmap myBitmap;
     Canvas tempCanvas;
     Paint myPaint1, myPaint2, myPaint3;
@@ -65,22 +74,31 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     public double d4, d14;
     public double d5, d15;
     public double d6, d16;
+    public double d7,d17;
     public double a, b;
+    public String kuku;
     SensorManager sensorManager;
     TextView display, textexplore;
     float[] mGravity;
     float[] mGeomagnetic;
-    double positions[][] = {{7.3, 16.93}, {19.5, 16.93}, {13.4, 23.5}, {9.32, 9.7}, {18.26, 9.7}};
-    double distances[] = new double[5];
+    double positions[][] = {{7.3, 16.93}, {19.5, 16.93}, {13.4, 23.5}, {9.32, 9.7}, {18.26, 9.7},{3.32,9.7},{20.65,9.7}};
+    double distances[] = new double[7];
+    double positions1[][]= new double[3][2];
+    double distances1[]= new double[3];
+    String proximitybeacon;
     int c1 = 0;
     int c2 = 0;
     int c3 = 0;
     int c4 = 0;
     int c5 = 0;
     int c6 = 0;
+    int c7=0;
     int p1 = 0;
     ImageView map;
-    TextView myTextView, inspect;
+    HashMap<String, Double> budget = new HashMap<>();
+    TextView inspect;
+    HashMap<String , String>  beacons = new HashMap<String,String>();
+
     public final String beacon1 = "55:46:4F:D2:6A:CF";
     public final String beacon2 = "55:46:4F:D2:6A:DD";
     public final String beacon3 = "55:46:4F:11:87:50";
@@ -88,72 +106,6 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     public final String beacon5 = "55:46:4F:11:87:13";
     public final String beacon6 = "55:46:4F:11:88:59";
     public final String beacon7 = "55:46:4F:11:88:1B";
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String string = bundle.getString("myKey");
-            String[] str = string.split(",");
-            if (str[0].equals(beacon1)) {
-                d1 = Double.parseDouble(str[1]);
-                if (d1 != 0) {
-                    c1++;
-                    d11 = d11 + d1;
-                }
-            } else if (str[0].equals(beacon2)) {
-                d2 = Double.parseDouble(str[1]);
-                if (d2 != 0) {
-                    c2++;
-                    d12 = d12 + d2;
-                }
-            } else if (str[0].equals(beacon3)) {
-                d3 = Double.parseDouble(str[1]);
-                if (d3 != 0) {
-                    c3++;
-                    d13 = d13 + d3;
-                }
-            }
-            if (str[0].equals(beacon4)) {
-                d4 = Double.parseDouble(str[1]);
-                if (d4 != 0) {
-                    c4++;
-                    d14 = d14 + d4;
-                }
-            } else if (str[0].equals(beacon5)) {
-                d5 = Double.parseDouble(str[1]);
-                if (d5 != 0) {
-                    c5++;
-                    d15 = d15 + d5;
-                }
-            }
-            if (c1 > 9 && c2 > 9 && c3 > 9 && c4 > 9 && c5 > 9) {
-                distances[0] = d11 / c1;
-                distances[1] = d12 / c2;
-                distances[2] = d13 / c3;
-                distances[3] = d14 / c4;
-                distances[4] = d15 / c5;
-                NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
-                LeastSquaresOptimizer.Optimum optimum = solver.solve();
-                double[] centroid = optimum.getPoint().toArray();
-                a = centroid[0];
-                b = centroid[1];
-                d11 = 0;
-                d12 = 0;
-                d13 = 0;
-                c1 = 0;
-                c2 = 0;
-                c3 = 0;
-                d14 = 0;
-                d15 = 0;
-                d16 = 0;
-                c4 = 0;
-                c5 = 0;
-                c6 = 0;
-                plott((float) centroid[0], (float) centroid[1]);
-                explor();
-            }
-        }
-    };
 
     private void explor() {
         Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -162,93 +114,34 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         sensorManager.registerListener(plot.this, magnometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    Handler handler1 = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String string = bundle.getString("myKey1");
-            String[] str = string.split(",");
-            if (str[0].equals(beacon1)) {
-                d1 = Double.parseDouble(str[1]);
-                if (d1 != 0) {
-                    c1++;
-                    d11 = d11 + d1;
-                }
-            } else if (str[0].equals(beacon2)) {
-                d2 = Double.parseDouble(str[1]);
-                if (d2 != 0) {
-                    c2++;
-                    d12 = d12 + d2;
-                }
-            } else if (str[0].equals(beacon3)) {
-                d3 = Double.parseDouble(str[1]);
-                if (d3 != 0) {
-                    c3++;
-                    d13 = d13 + d3;
-                }
-            }
-            if (str[0].equals(beacon4)) {
-                d4 = Double.parseDouble(str[1]);
-                if (d4 != 0) {
-                    c4++;
-                    d14 = d14 + d4;
-                }
-            } else if (str[0].equals(beacon5)) {
-                d5 = Double.parseDouble(str[1]);
-                if (d5 != 0) {
-                    c5++;
-                    d15 = d15 + d5;
-                }
-            }
-            if (c1 > 4 && c2 > 4 && c3 > 4 && c4 > 4 && c5 > 4) {
-                distances[0] = d11 / c1;
-                distances[1] = d12 / c2;
-                distances[2] = d13 / c3;
-                distances[3] = d14 / c4;
-                distances[4] = d15 / c5;
-                double min = distances[0];
-                int index = 0;
-                for (int a = 0; a < distances.length; a++) {
-                    if (min > distances[a]) {
-                        min = distances[a];
-                        index = a;
-                    }
-                }
-                if (min < 2) {
-                    myTextView = findViewById(R.id.display);
-                    myTextView.setText("Beacon " + (index + 1));
-                    alert();
-                }
-                NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
-                LeastSquaresOptimizer.Optimum optimum = solver.solve();
-                double[] centroid = optimum.getPoint().toArray();
-                d11 = 0;
-                d12 = 0;
-                d13 = 0;
-                c1 = 0;
-                c2 = 0;
-                c3 = 0;
-                d14 = 0;
-                d15 = 0;
-                d16 = 0;
-                c4 = 0;
-                c5 = 0;
-                c6 = 0;
-                plott((float) centroid[0], (float) centroid[1]);
-            }
-        }
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plotter);
-        map = findViewById(R.id.map);
+        beacons.put("55:46:4F:D2:6A:CF","Beacon1");
+        beacons.put("55:46:4F:D2:6A:DD","Beacon2");
+        beacons.put("55:46:4F:11:87:50","Beacon3");
+        beacons.put("55:46:4F:11:88:22","Beacon4");
+        beacons.put("55:46:4F:11:87:13","Beacon5");
+        beacons.put("55:46:4F:11:88:59","Beacon6");
+        beacons.put("55:46:4F:11:88:1B","Beacon7");
+        checkLocationPermission();
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                textToSpeech.setLanguage(Locale.ENGLISH);
+            }
+        });
+        map = findViewById(R.id.map);
         textexplore = findViewById(R.id.textexplore);
         startexplore = findViewById(R.id.startexplore);
         stopexplore = findViewById(R.id.stopexplore);
+        read=findViewById(R.id.read);
         inspect = findViewById(R.id.inspect);
+        start=findViewById(R.id.start);
         prev = findViewById(R.id.prev);
         next = findViewById(R.id.next);
         display = findViewById(R.id.display);
@@ -278,11 +171,22 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 inspect.setVisibility(View.VISIBLE);
             }
         });
+        read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String toSpeak=inspect.getText().toString();
+                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (p1 > -1 && p1 < nextie.length)
+                if (p1 > -1 && p1 < nextie.length) {
                     display.setText(previe[p1--]);
+                    String toSpeak=display.getText().toString();
+                    textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+                    }
                 if (p1 < 0)
                     p1 = 0;
             }
@@ -290,8 +194,11 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (p1 < nextie.length && p1 > -1)
+                if (p1 < nextie.length && p1 > -1) {
                     display.setText(nextie[p1++]);
+                    String toSpeak=display.getText().toString();
+                    textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+                }
                 if (p1 >= (nextie.length))
                     p1 = nextie.length - 1;
             }
@@ -299,36 +206,51 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         startexplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //textexplore.setText("Arpit is a good boy. But what to do tell me. Can't actually do anything but still i will try to lessen my goodness. Arpit is a good boy. But what to do tell me. Can't actually do anything but still i will try to lessen my goodness. Arpit is a good boy. But what to do tell me. Can't actually do anything but still i will try to lessen my goodness");
+
+                explor();
+            }
+        });
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startScanning();
             }
         });
         stopexplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textexplore.setText("");
+                onPause();
             }
         });
-        description();
-        checkLocationPermission();
         ufoBeaconManager = new UFOBeaconManager(plot.this);
         if (bluetoothAdapter.isEnabled()) {
-            Toast.makeText(plot.this, "Bluetooth On", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(plot.this, "Bluetooth On", Toast.LENGTH_SHORT).show();
         } else if (!bluetoothAdapter.isEnabled()) {
-            Toast.makeText(plot.this, "Bluetooth Off", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(plot.this, "Bluetooth Off", Toast.LENGTH_SHORT).show();
         }
-        plott((float) 5.0, (float) 5.0);
-    }
+        description();
+        plott();
+        }
 
+    public void alert2(String proximitybeacon)
+    {
+        ArrayList<String> tags = decision.hashBeacon.get(proximitybeacon).tags;
+        String s="";
+        for(String tag:tags)
+            s+=tag+"\n";
+        textToSpeech.speak("You have reached "+ s.replaceAll("_"," "),TextToSpeech.QUEUE_FLUSH, null);
+        }
     public void alert() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(200);
-        try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+//            r.play();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public boolean checkLocationPermission() {
@@ -390,57 +312,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         Toast.makeText(plot.this, "Bluetooth OFF", Toast.LENGTH_SHORT).show();
     }
 
-    public void enableScan() {
-        ufoBeaconManager.startScan(new OnScanSuccessListener() {
-            @Override
-            public void onSuccess(final UFODevice ufoDevice) {
-                runOnUiThread(new Runnable() {
-                    Message msg = handler.obtainMessage();
-                    Bundle bundle = new Bundle();
 
-                    @Override
-                    public void run() {
-                        BluetoothDevice bt = ufoDevice.getBtdevice();
-                        String store1 = bt.getAddress();
-                        double store3 = ufoDevice.getDistance();
-                        bundle.putString("myKey", store1 + "," + store3);
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
-                    }
-                });
-            }
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(int i, String s) {
-            }
-        });
-    }
-
-    public void enableScan1() {
-        ufoBeaconManager.startScan(new OnScanSuccessListener() {
-            @Override
-            public void onSuccess(final UFODevice ufoDevice) {
-                runOnUiThread(new Runnable() {
-                    Message msg = handler1.obtainMessage();
-                    Bundle bundle = new Bundle();
-
-                    @Override
-                    public void run() {
-                        BluetoothDevice bt = ufoDevice.getBtdevice();
-                        String store1 = bt.getAddress();
-                        double store3 = ufoDevice.getDistance();
-                        bundle.putString("myKey1", store1 + "," + store3);
-                        msg.setData(bundle);
-                        handler1.sendMessage(msg);
-                    }
-                });
-            }
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(int i, String s) {
-            }
-        });
-    }
 
     public void disableScan() {
         ufoBeaconManager.stopScan(new OnSuccessListener() {
@@ -460,13 +332,14 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         });
     }
 
-    private void plott(float x, float y) {
+
+
+    private void plott()
+    {
         int i, f, n, ff;
         int row1, row2;
         int col1, col2;
         float r1 = 5f;
-        x = (float) (x * 13.0434);
-        y = (float) (y * 15.306);
         myBitmap = Bitmap.createBitmap(360, 360, Bitmap.Config.ARGB_8888);
         myPaint1 = new Paint();
         myPaint2 = new Paint();
@@ -502,28 +375,16 @@ public class plot extends AppCompatActivity implements SensorEventListener {
             else
                 tempCanvas.drawRect((float) (col1 * 6), (float) ((row1 + 1) * 6), (float) ((col1 + 1) * 6), (float) ((row1 + 2) * 6), myPaint2);
         }
-//        String data=decision.getData();
-//        vale=data.split(",");
-//        map.setImageDrawable(new BitmapDrawable(getResources(), myBitmap));
-//        map.setBackgroundResource(getResources().getIdentifier(vale[1],"drawable",this.getPackageName()));
-
-        for (ff = 1; ff < 28; ff++) {
-            tempCanvas.drawRect((float) (13.0434 * ff), (float) 0.0, (float) (13.0434 * ff + 1), (float) 360, myPaint2);
-        }
-        for (ff = 1; ff < 24; ff++) {
-            tempCanvas.drawRect((float) 0.0, (float) (15.306 * ff), (float) 360, (float) (15.306 * ff + 1), myPaint2);
-        }
-        for (ff = 0; ff < positions.length; ff++) {
-            tempCanvas.drawCircle((float) (positions[ff][0] * 13.0434), (float) (positions[ff][1] * 15.306), r1, myPaint3);
-        }
-        tempCanvas.drawCircle(x, y, r1, myPaint1);
+        String data=decision.getData();
+        vale=data.split(",");
         map.setImageDrawable(new BitmapDrawable(getResources(), myBitmap));
-        map.setBackground(getResources().getDrawable(R.drawable.fullsit));
+        map.setBackgroundResource(getResources().getIdentifier(vale[1],"drawable",this.getPackageName()));
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         String str = "";
+        int row1,col1,row2,col2;
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
             mGravity = event.values;
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
@@ -541,17 +402,35 @@ public class plot extends AppCompatActivity implements SensorEventListener {
                 if (data < 0) {
                     data += 360;
                 }
-                display.setText(data + "");
-                for (int i = 0; i < 5; i++) {
-                    float angle = (float) Math.toDegrees(Math.atan2(positions[i][1] - b, positions[i][0] - a));
-                    if (angle < 0) {
-                        angle = angle + 360;
-                    }
-                    if ((angle > data - 30 && angle < data + 30) || (angle > data + 360 - 30 && angle < data + 360 + 30)) {
-                        str = str + "Beacon" + " " + (i + 1) + ", ";
-                    }
+                if(lastBeacon.equals(("Beacon7")))
+                {
+                    if(data> 301 && data< 336)
+                        str=str+"Men's Washroom"+"\n";
+                    else if(data>6  && data< 16)
+                        str=str+"Women's Washroom"+"\n";
                 }
-                textexplore.setText(str);
+                int cordinate = decision.hashBeacon.get(lastBeacon).intValue;
+                row1 = cordinate / 100;
+                col1 = cordinate % 100;
+                List<String> cat1=decision.getCategory();
+                List<Integer> cat2=decision.getValue();
+                for(int i=0;i<cat1.size();i++)
+                {
+                    int titu= cat2.get(i);
+                    if(titu!=cordinate){
+                        row2 = titu / 100;
+                        col2 = titu % 100;
+                        float angle=(float)Math.toDegrees((Math.atan2((row2-row1)*0.392,(col2-col1)*0.46)));
+                        if(angle<0)
+                            angle = angle + 360;
+                        if ((angle > data - 10 && angle < data + 10) || (angle > data + 360 - 10 && angle < data + 360 + 10)) {
+                            str = str + cat1.get(i)+"\n";
+                            }
+                        }}
+                textexplore.setText(str.replaceAll("_"," "));
+//                String toSpeak=textexplore.getText().toString();
+//                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+
             }
         }
     }
@@ -570,5 +449,62 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         for (int tt = 0; tt < nextie.length; tt++)
             str = str + nextie[tt] + "\n";
         inspect.setText(str);
+        String toSpeak=inspect.getText().toString();
+        textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    public static HashMap<String,Double> sortByValue(HashMap<String, Double> hm)
+    {
+        List<Map.Entry<String, Double> > list = new LinkedList<Map.Entry<String, Double> >(hm.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Double> >() {
+            public int compare(Map.Entry<String, Double> o1,
+                               Map.Entry<String, Double> o2)
+            {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+        for (Map.Entry<String, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    public void startScanning(){
+        ufoBeaconManager.startScan(new OnScanSuccessListener() {
+            @Override
+            public void onSuccess(final UFODevice ufoDevice) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                            String c1=ufoDevice.getBtdevice().getAddress();
+                          if(decision.hashBeacon.containsKey(beacons.get(c1))){
+                            Beacon beacon =decision.hashBeacon.get(beacons.get(c1));
+                            double d1=ufoDevice.getDistance();
+                            if(d1!=0) {
+                                beacon.count++;
+                                beacon.distance += d1;
+                                if (beacon.count > 3) {
+                                    if (beacon.distance/beacon.count<1 && !lastBeacon.equals(beacon.beaconName)){
+                                        alert2(beacon.beaconName);
+                                        alert();
+                                        lastBeacon = beacon.beaconName;
+                                    }
+                                    beacon.count = 0;
+                                    beacon.distance = 0;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
     }
 }
+
+

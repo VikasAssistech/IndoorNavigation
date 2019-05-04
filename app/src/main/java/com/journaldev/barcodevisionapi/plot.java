@@ -55,7 +55,7 @@ public class plot extends AppCompatActivity implements SensorEventListener {
     public BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     public Button startexplore, stopexplore, prev, next, read,start;
     public UFOBeaconManager ufoBeaconManager;
-    public String lastBeacon="akshay";
+    public String lastBeacon="dummy";
     public TextToSpeech textToSpeech;
     Bitmap myBitmap;
     Canvas tempCanvas;
@@ -206,8 +206,14 @@ public class plot extends AppCompatActivity implements SensorEventListener {
         startexplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(lastBeacon.equals("dummy"))
+                {
+                    Toast.makeText(plot.this, "You are not in proximity!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    explor();
 
-                explor();
+
             }
         });
         start.setOnClickListener(new View.OnClickListener() {

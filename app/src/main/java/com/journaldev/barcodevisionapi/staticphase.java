@@ -80,16 +80,22 @@ public class staticphase extends AppCompatActivity{
         initViews();
     }
     private void initViews() {
-        Toast.makeText(staticphase.this, "Or enter it manually above!", Toast.LENGTH_LONG).show();
         btn=findViewById(R.id.submit_query);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textToSpeech.speak("Submit",TextToSpeech.QUEUE_FLUSH,null);
-                String data=decision.getData();
-                val=data.split(",");
-                shortpath=shortpathurl+s1+"&destination="+s2+"&building="+val[1]+"&floor="+val[0];
-                queryval();
+                if(s1.equals(s2)) {
+                    Toast.makeText(staticphase.this, "Source and Destination are the same!", Toast.LENGTH_SHORT).show();
+                    textToSpeech.speak("Source and Destination are the same!",TextToSpeech.QUEUE_FLUSH,null);
+                }
+                else
+                {
+                    String data = decision.getData();
+                    val = data.split(",");
+                    shortpath = shortpathurl + s1 + "&destination=" + s2 + "&building=" + val[1] + "&floor=" + val[0];
+                    queryval();
+                }
             }
         });
     }

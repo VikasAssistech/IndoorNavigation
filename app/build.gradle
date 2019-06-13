@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+    compileOptions {
+        sourceCompatibility '1.7'  // <= add this
+        targetCompatibility '1.7'  // <= add this
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.journaldev.barcodevisionapi"
